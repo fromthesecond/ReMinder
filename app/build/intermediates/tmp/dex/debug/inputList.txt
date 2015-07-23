@@ -1,0 +1,10 @@
+D:\Diploma\ReMinder\app\build\intermediates\classes\debug
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-8f46f4885fdd8a7bdbe20ff148a33e45034f1650.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\systembartint-1.0.3-0471738f114616894bf228ef232ee20655ab154a.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-46910c2cd2f3c02b314a43ad91d18182ef5bf303.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-989413892acd856767784eda4f9b8f57a012435d.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-d9fbf2c24cb7d13eda7c75ee475086cf28c41598.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-bd49162f52ac417597db99f870acc3d92a121f36.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-4b7cc3ba5aa2d3a13c92ada996bcd2abcdf3104c.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-ec11e3b32b1fe95f8178f086c059d952eb2bb8a4.jar
+D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-c37347e27d29a6c0bb57dcd1fbaac5e65480d39c.jar

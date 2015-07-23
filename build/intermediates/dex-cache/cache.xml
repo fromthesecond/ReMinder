@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-c37347e27d29a6c0bb57dcd1fbaac5e65480d39c.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-bd49162f52ac417597db99f870acc3d92a121f36.jar" />
+    </item>
+    <item
+        jar="C:\Users\MicrosoftMustDie\.gradle\caches\modules-2\files-2.1\com.readystatesoftware.systembartint\systembartint\1.0.3\de4f7404e2f58d8f6e83cb1e85d0c2d6c2987287\systembartint-1.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="de4f7404e2f58d8f6e83cb1e85d0c2d6c2987287">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\systembartint-1.0.3-0471738f114616894bf228ef232ee20655ab154a.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.github.rey5137\material\1.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="60dee46bb1ba50fb53b5d064694dc849246596fd">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-4b7cc3ba5aa2d3a13c92ada996bcd2abcdf3104c.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-ec11e3b32b1fe95f8178f086c059d952eb2bb8a4.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-46910c2cd2f3c02b314a43ad91d18182ef5bf303.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.mikepenz\materialdrawer\3.0.7\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6cc23d75ceecfb185b31bad520d6dd065637c25b">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-d9fbf2c24cb7d13eda7c75ee475086cf28c41598.jar" />
+    </item>
+    <item
+        jar="C:\Users\MicrosoftMustDie\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-8f46f4885fdd8a7bdbe20ff148a33e45034f1650.jar" />
+    </item>
+    <item
+        jar="D:\Diploma\ReMinder\app\build\intermediates\exploded-aar\com.mikepenz\iconics\1.0.2\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1520399b5434780b68c85c0e9266caa2f381ada3">
+        <dex dex="D:\Diploma\ReMinder\app\build\intermediates\pre-dexed\debug\classes-989413892acd856767784eda4f9b8f57a012435d.jar" />
+    </item>
+
+</items>
