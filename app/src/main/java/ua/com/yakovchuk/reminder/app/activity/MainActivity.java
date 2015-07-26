@@ -10,13 +10,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import ua.com.yakovchuk.reminder.R;
@@ -41,21 +50,22 @@ public class MainActivity extends ActionBarActivity {
         setupNavigationDrawer(savedInstanceState);
         listFragment = new ListFragment();
         viewMindFragment = new ViewMindFragment();
+        toListViewFragment();
     }
 
-    public void toListViewFragment(MenuItem item) {
+    public void toListViewFragment() {
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
-        transaction.add(R.id.container, listFragment, listFragment.TAG);
+        transaction.replace(R.id.container, listFragment, listFragment.TAG);
         transaction.commit();
     }
 
-    public void toViewMindFragment(MenuItem item) {
+    public void toViewMindFragment() {
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
-        transaction.add(R.id.container, viewMindFragment, viewMindFragment.TAG);
+        transaction.replace(R.id.container, viewMindFragment, ViewMindFragment.TAG);
         transaction.commit();
     }
 
@@ -82,6 +92,25 @@ public class MainActivity extends ActionBarActivity {
                 .withHeader(R.layout.drawer_header)
                 .withAnimateDrawerItems(true)
                 .withSavedInstance(savedInstanceState)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Global").withBadge("12").withIdentifier(1),
+                        new SecondaryDrawerItem().withName("Family").withIdentifier(2),
+                        new SecondaryDrawerItem().withName("Private").withIdentifier(3)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                        if (drawerItem instanceof Nameable) {
+                            Toast.makeText(MainActivity.this, ((Nameable) drawerItem).getName() +id + position, Toast.LENGTH_SHORT).show();
+                        }
+                        if (id == 0) {
+                            toViewMindFragment();
+                        }
+                        if (id ==1) {
+                            toListViewFragment();
+                        }
+                        return false;
+                    }})
                 .build();
     }
 
@@ -115,6 +144,16 @@ public class MainActivity extends ActionBarActivity {
         Typeface face = Typeface.createFromAsset(getAssets(),
                 string);
         return face;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(drawerResult.isDrawerOpen()){
+            drawerResult.closeDrawer();
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
 
