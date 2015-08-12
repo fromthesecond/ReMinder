@@ -5,52 +5,124 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ListFragment;
+import ua.com.yakovchuk.reminder.app.fragment.MainFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ViewMindFragment;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private Drawer drawerResult;
-    private IProfile profile;
-    private AccountHeader headerResult = null;
     private ListFragment listFragment;
     private ViewMindFragment viewMindFragment;
+    private MainFragment mainFragment;
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private CreateMindFragment createMindFragment;
+    private boolean exit;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private android.support.v7.app.ActionBar actionBar;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSystemBarColor(this);
-        setupNavigationDrawer(savedInstanceState);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        }
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         listFragment = new ListFragment();
         viewMindFragment = new ViewMindFragment();
-        toListViewFragment();
+        createMindFragment = new CreateMindFragment();
+        mainFragment = new MainFragment();
+        toMainFragment(); //Default screen
+        drawerLayout = new DrawerLayout(getApplicationContext());
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this,
+                drawerLayout,
+                R.string.welcome,
+                R.string.note) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActionBar().setTitle("Title");
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.create_note_item:
+                        toCreateMindFragment();
+                        menuItem.setChecked(true);
+                        break;
+                    case R.id.list_item:
+                        toListViewFragment();
+                        menuItem.setChecked(true);
+                        break;
+                    case R.id.view_item:
+                        menuItem.setChecked(true);
+                        toViewMindFragment();
+                        break;
+                    case R.id.main_item:
+                        menuItem.setChecked(true);
+                        toMainFragment();
+                        break;
+                }
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+    public void toMainFragment() {
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+        transaction.replace(R.id.container, mainFragment, mainFragment.TAG);
+        transaction.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onFloatingButtonAction(View view) {
+        toCreateMindFragment();
     }
 
     public void toListViewFragment() {
@@ -58,6 +130,15 @@ public class MainActivity extends ActionBarActivity {
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
         transaction.replace(R.id.container, listFragment, listFragment.TAG);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void toCreateMindFragment() {
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+        transaction.replace(R.id.container, createMindFragment, createMindFragment.TAG);
         transaction.commit();
     }
 
@@ -67,51 +148,6 @@ public class MainActivity extends ActionBarActivity {
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
         transaction.replace(R.id.container, viewMindFragment, ViewMindFragment.TAG);
         transaction.commit();
-    }
-
-    private void setupNavigationDrawer(Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        profile = new ProfileDrawerItem()
-                .withName("Roman Yakovchuk")
-                .withEmail("fromthesecond@gmail.com");
-
-        headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withCompactStyle(false)
-                .withHeaderBackground(R.drawable.header)
-                .addProfiles(profile)
-                .withSavedInstance(savedInstanceState)
-                .build();
-        drawerResult = new DrawerBuilder()
-                .withActivity(MainActivity.this)
-                .withToolbar(toolbar)
-                .withAccountHeader(headerResult)
-                .withActionBarDrawerToggle(true)
-                .withHeader(R.layout.drawer_header)
-                .withAnimateDrawerItems(true)
-                .withSavedInstance(savedInstanceState)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Global").withBadge("12").withIdentifier(1),
-                        new SecondaryDrawerItem().withName("Family").withIdentifier(2),
-                        new SecondaryDrawerItem().withName("Private").withIdentifier(3)
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
-                        if (drawerItem instanceof Nameable) {
-                            Toast.makeText(MainActivity.this, ((Nameable) drawerItem).getName() +id + position, Toast.LENGTH_SHORT).show();
-                        }
-                        if (id == 0) {
-                            toViewMindFragment();
-                        }
-                        if (id ==1) {
-                            toListViewFragment();
-                        }
-                        return false;
-                    }})
-                .build();
     }
 
     public void setSystemBarColor(Activity activity) {
@@ -126,6 +162,20 @@ public class MainActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (listFragment.isVisible()){
+            menu.setGroupVisible(R.id.search_group, true);
+        }
+        if (createMindFragment.isVisible()){
+            menu.setGroupVisible(R.id.ok_group, true);
+        }
+        if (viewMindFragment.isVisible()){
+            menu.setGroupVisible(R.id.delete_group, true);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public Typeface getFont(String arg) {
@@ -147,14 +197,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        if(drawerResult.isDrawerOpen()){
-            drawerResult.closeDrawer();
-        }
-        else{
-            super.onBackPressed();
+    public void onBackPressed() {
+        if (exit) {
+            if (!isFinishing()) {
+                finish();
+            }
+        } else {
+            Toast.makeText(this, "Press Back Again to Exit", Toast.LENGTH_LONG).show();
+            exit = true;
         }
     }
-
-
 }

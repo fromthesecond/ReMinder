@@ -7,5 +7,12 @@
     <string name="font_roboto_regular">fonts/Roboto-Regular.ttf</string>
     <string name="font_roboto_medium">fonts/Roboto-Medium.ttf</string>
     <string name="font_roboto_bold">fonts/Roboto-Bold.ttf</string>
+    <string name="header">Title</string>
+    <string name="note">Note</string>
+    <string name="toCreateNoteFragment">Create Note Fragment</string>
+    <string name="toViewMindFragment">View Mind Fragment</string>
+    <string name="toListViewFragment">ListView Fragment</string>
+    <string name="welcome">Welcome to Minder</string>
+
 
 </resources>

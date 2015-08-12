@@ -6,4 +6,5 @@
     <color name="MaterialWhite">#FfFFFF</color>
     <color name="MaterialBlack">#000000</color>
     <color name="MaterialBlueGray">#b0bec5</color>
+    <color name="MaterialOrange500">#ff9800</color>
 </resources>
