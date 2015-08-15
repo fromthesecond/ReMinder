@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -24,9 +26,10 @@ import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ListFragment;
 import ua.com.yakovchuk.reminder.app.fragment.MainFragment;
+import ua.com.yakovchuk.reminder.app.fragment.Message;
 import ua.com.yakovchuk.reminder.app.fragment.ViewMindFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Message{
 
     private ListFragment listFragment;
     private ViewMindFragment viewMindFragment;
@@ -60,22 +63,6 @@ public class MainActivity extends AppCompatActivity {
         toMainFragment(); //Default screen
         drawerLayout = new DrawerLayout(getApplicationContext());
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                R.string.welcome,
-                R.string.note) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getActionBar().setTitle("Title");
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -206,5 +193,15 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Press Back Again to Exit", Toast.LENGTH_LONG).show();
             exit = true;
         }
+    }
+
+    @Override
+    public void respond(String respondMessage) {
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        viewMindFragment.setRespondMessage(respondMessage);
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+        transaction.replace(R.id.container, viewMindFragment);
+        transaction.commit();
     }
 }

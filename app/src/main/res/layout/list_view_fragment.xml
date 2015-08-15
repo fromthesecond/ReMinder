@@ -24,6 +24,4 @@
             android:layout_marginRight="16dp"
             android:onClick="onFloatingButtonAction">
         </android.support.design.widget.FloatingActionButton>
-
-
 </RelativeLayout>

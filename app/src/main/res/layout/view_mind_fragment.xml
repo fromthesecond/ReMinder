@@ -1,6 +1,92 @@
 <LinearLayout
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:id="@+id/root_mind_layout"
+    android:gravity="start">
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/MaterialIndigo500"
+    android:weightSum="1"
+    android:layout_weight="0.10"
+    android:padding="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            android:src="@drawable/circle" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="62dp"
+            android:text="Title"
+            android:id="@+id/text_view_mind"
+            android:textColor="@color/MaterialWhite"
+            android:textSize="20sp"
+            android:textIsSelectable="false"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal" />
 
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/tags"
+        android:id="@+id/tagsView"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.25"
+        android:textColor="@color/MaterialWhite" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="UA, Kyiv"
+        android:id="@+id/position"
+        android:phoneNumber="false"
+        android:textColor="@color/MaterialWhite"
+        android:textSize="10sp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="12 September 2015 16:05 AM"
+        android:id="@+id/textView2"
+        android:textSize="11sp"
+        android:gravity="right"
+        android:textColor="@color/MaterialWhite" />
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="0.9">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/note_message"
+        android:id="@+id/note_message"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.45"
+        android:textSize="18sp"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/last_modifed"
+        android:id="@+id/last_modifed"
+        android:gravity="center_horizontal" />
+</LinearLayout>
 </LinearLayout>
