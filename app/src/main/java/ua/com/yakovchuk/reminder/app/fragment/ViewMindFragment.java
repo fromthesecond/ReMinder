@@ -2,22 +2,20 @@ package ua.com.yakovchuk.reminder.app.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.activity.MainActivity;
 
 public class ViewMindFragment extends Fragment {
     public final static String TAG = "ViewMindFragment";
     private TextView textView;
     public String respondMessage;
-
+    private Toolbar toolbar;
     public String getRespondMessage() {
         return respondMessage;
     }
@@ -28,6 +26,7 @@ public class ViewMindFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //toolbar = (Toolbar) getActivity().findViewById(R.id.collapse_toolbar);
         return inflater.inflate(R.layout.view_mind_fragment, null);
     }
 
@@ -41,5 +40,7 @@ public class ViewMindFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().invalidateOptionsMenu();
+        //((MainActivity)getActivity()).setSupportActionBar(toolbar);
     }
+
 }

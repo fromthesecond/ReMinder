@@ -11,13 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -41,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements Message{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private android.support.v7.app.ActionBar actionBar;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +47,6 @@ public class MainActivity extends AppCompatActivity implements Message{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        }
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         listFragment = new ListFragment();
         viewMindFragment = new ViewMindFragment();
@@ -63,6 +55,15 @@ public class MainActivity extends AppCompatActivity implements Message{
         toMainFragment(); //Default screen
         drawerLayout = new DrawerLayout(getApplicationContext());
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                MainActivity.this,
+                drawerLayout,
+                toolbar,
+                R.string.opened,
+                R.string.closed
+        );
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -74,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements Message{
                     case R.id.list_item:
                         toListViewFragment();
                         menuItem.setChecked(true);
-                        break;
-                    case R.id.view_item:
-                        menuItem.setChecked(true);
-                        toViewMindFragment();
                         break;
                     case R.id.main_item:
                         menuItem.setChecked(true);
@@ -117,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements Message{
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
         transaction.replace(R.id.container, listFragment, listFragment.TAG);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -126,14 +122,6 @@ public class MainActivity extends AppCompatActivity implements Message{
         transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
         transaction.replace(R.id.container, createMindFragment, createMindFragment.TAG);
-        transaction.commit();
-    }
-
-    public void toViewMindFragment() {
-        manager = getFragmentManager();
-        transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
-        transaction.replace(R.id.container, viewMindFragment, ViewMindFragment.TAG);
         transaction.commit();
     }
 
@@ -185,13 +173,17 @@ public class MainActivity extends AppCompatActivity implements Message{
 
     @Override
     public void onBackPressed() {
-        if (exit) {
-            if (!isFinishing()) {
-                finish();
-            }
+        if (viewMindFragment.isVisible()){
+            manager.popBackStack();
         } else {
-            Toast.makeText(this, "Press Back Again to Exit", Toast.LENGTH_LONG).show();
-            exit = true;
+            if (exit) {
+                if (!isFinishing()) {
+                    finish();
+                }
+            } else {
+                Toast.makeText(this, "Press Back Again to Exit", Toast.LENGTH_LONG).show();
+                exit = true;
+            }
         }
     }
 
@@ -200,8 +192,10 @@ public class MainActivity extends AppCompatActivity implements Message{
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
         viewMindFragment.setRespondMessage(respondMessage);
-        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right,
+                R.anim.slide_in_left, R.anim.slide_in_right); // more animation for popBackStack()
         transaction.replace(R.id.container, viewMindFragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 }

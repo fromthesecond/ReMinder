@@ -16,7 +16,8 @@
     <string name="tags">#vsco #vscocam #kyiv #awesome #icebucketchallange</string>
     <string name="last_modifed">Last Modifed</string>
     <string name="note_message">Medium Text</string>
-    <string name="title_view_mind">Title</string>
+    <string name="opened">Navigation drawer opened</string>
+    <string name="closed">Navigation drawer closed</string>
 
 
 </resources>
