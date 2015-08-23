@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.interfaces.Message;
 import ua.com.yakovchuk.reminder.app.lib.CustomAdapter;
 
 public class ListFragment extends Fragment {
@@ -42,12 +43,12 @@ public class ListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                message.respond(String.valueOf("Message #")+i);
+                message.respond(String.valueOf("Message #") + i);
             }
         });
     }
 
-    public void setupListView () {
+    public void setupListView() {
         names = new ArrayList<String>();
         description = new ArrayList<String>();
         names.add("Adam Sendler");
@@ -64,6 +65,6 @@ public class ListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        message = (Message)activity;
+        message = (Message) activity;
     }
 }

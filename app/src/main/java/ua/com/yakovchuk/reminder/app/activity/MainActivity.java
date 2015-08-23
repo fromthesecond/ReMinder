@@ -23,7 +23,7 @@ import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ListFragment;
 import ua.com.yakovchuk.reminder.app.fragment.MainFragment;
-import ua.com.yakovchuk.reminder.app.fragment.Message;
+import ua.com.yakovchuk.reminder.app.interfaces.Message;
 import ua.com.yakovchuk.reminder.app.fragment.ViewMindFragment;
 
 public class MainActivity extends AppCompatActivity implements Message{
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements Message{
     private FragmentTransaction transaction;
     private CreateMindFragment createMindFragment;
     private boolean exit;
+    private boolean isFirstRun;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private android.support.v7.app.ActionBar actionBar;
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements Message{
         viewMindFragment = new ViewMindFragment();
         createMindFragment = new CreateMindFragment();
         mainFragment = new MainFragment();
-        toMainFragment(); //Default screen
         drawerLayout = new DrawerLayout(getApplicationContext());
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
@@ -64,14 +64,17 @@ public class MainActivity extends AppCompatActivity implements Message{
         );
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isfirstrun", true);
+        if (isFirstRun) {
+            toMainFragment();
+        } else {
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).
+                    edit().putBoolean("isfirstrun", false).commit();
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.create_note_item:
-                        toCreateMindFragment();
-                        menuItem.setChecked(true);
-                        break;
                     case R.id.list_item:
                         toListViewFragment();
                         menuItem.setChecked(true);
@@ -120,8 +123,10 @@ public class MainActivity extends AppCompatActivity implements Message{
     public void toCreateMindFragment() {
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right,
+                R.anim.slide_in_left, R.anim.slide_in_right);
         transaction.replace(R.id.container, createMindFragment, createMindFragment.TAG);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -173,8 +178,9 @@ public class MainActivity extends AppCompatActivity implements Message{
 
     @Override
     public void onBackPressed() {
-        if (viewMindFragment.isVisible()){
+        if (viewMindFragment.isVisible() || drawerLayout.isShown()){
             manager.popBackStack();
+            drawerLayout.closeDrawers();
         } else {
             if (exit) {
                 if (!isFinishing()) {

@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ua.com.yakovchuk.reminder.R;
-import ua.com.yakovchuk.reminder.app.activity.MainActivity;
 
 public class ViewMindFragment extends Fragment {
     public final static String TAG = "ViewMindFragment";
     private TextView textView;
     public String respondMessage;
     private Toolbar toolbar;
+
     public String getRespondMessage() {
         return respondMessage;
     }

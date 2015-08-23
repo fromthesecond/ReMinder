@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import ua.com.yakovchuk.reminder.R;
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
     public final static String TAG = "MainFragment";
 

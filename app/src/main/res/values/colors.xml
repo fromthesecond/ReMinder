@@ -5,6 +5,7 @@
     <color name="MaterialIndigo700">#303f9f</color>
     <color name="MaterialWhite">#FfFFFF</color>
     <color name="MaterialBlack">#000000</color>
-    <color name="MaterialBlueGray">#b0bec5</color>
+    <color name="MaterialBlueGrey">#b0bec5</color>
+    <color name="MaterialGrey100">#f5f5f5</color>
     <color name="MaterialOrange500">#ff9800</color>
 </resources>

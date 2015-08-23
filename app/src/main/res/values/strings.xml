@@ -9,9 +9,8 @@
     <string name="font_roboto_bold">fonts/Roboto-Bold.ttf</string>
     <string name="header">Title</string>
     <string name="note">Note</string>
-    <string name="toCreateNoteFragment">Create Note Fragment</string>
-    <string name="toViewMindFragment">View Mind Fragment</string>
-    <string name="toListViewFragment">ListView Fragment</string>
+    <string name="main_fragment">Note</string>
+    <string name="toListViewFragment">Global Notes</string>
     <string name="welcome">Welcome to Minder</string>
     <string name="tags">#vsco #vscocam #kyiv #awesome #icebucketchallange</string>
     <string name="last_modifed">Last Modifed</string>

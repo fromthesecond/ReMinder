@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/MaterialIndigo500">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +16,16 @@
         android:id="@+id/textView"
         android:textColor="@color/MaterialWhite"
         android:textSize="36sp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:background="@color/MaterialIndigo500"
+        android:textColor="@color/MaterialWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check it!"
+        android:id="@+id/checit"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
 
 </LinearLayout>
