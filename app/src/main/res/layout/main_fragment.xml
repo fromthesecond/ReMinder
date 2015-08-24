@@ -26,6 +26,15 @@
         android:text="Check it!"
         android:id="@+id/checit"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/MaterialWhite"
+        android:text="Small Text"
+        android:id="@+id/textView4"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
 
 </LinearLayout>

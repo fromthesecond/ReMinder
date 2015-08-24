@@ -3,7 +3,14 @@ package ua.com.yakovchuk.reminder.app.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,18 +22,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ListFragment;
 import ua.com.yakovchuk.reminder.app.fragment.MainFragment;
-import ua.com.yakovchuk.reminder.app.interfaces.Message;
 import ua.com.yakovchuk.reminder.app.fragment.ViewMindFragment;
+import ua.com.yakovchuk.reminder.app.interfaces.Message;
 
-public class MainActivity extends AppCompatActivity implements Message{
+public class MainActivity extends AppCompatActivity implements Message {
 
     private ListFragment listFragment;
     private ViewMindFragment viewMindFragment;
@@ -39,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements Message{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private android.support.v7.app.ActionBar actionBar;
+    protected LocationManager locationManager;
+    protected LocationListener locationListener;
+    private Address lastAddress;
+    private double latitude;
+    private double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +82,49 @@ public class MainActivity extends AppCompatActivity implements Message{
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isfirstrun", true);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.getProvider(LocationManager.GPS_PROVIDER);
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                if (isConnected()) {
+                    try {
+                        TextView textView = (TextView) findViewById(R.id.textView4);
+                        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                        textView.setText(addresses.get(0).getCountryName() +
+                                ", "+ addresses.get(0).getLocality() +
+                                ", " + addresses.get(0).getAdminArea() +
+                                ", " + addresses.get(0).getAddressLine(0));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    TextView textView = (TextView) findViewById(R.id.textView4);
+                    textView.setText("You`re offline!");
+                }
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                TextView textView = (TextView) findViewById(R.id.textView4);
+                textView.setText("GPS is disabled");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                TextView textView = (TextView) findViewById(R.id.textView4);
+                textView.setText("Searching for location");
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                // Auto-generated method stub
+            }
+        };
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
         if (isFirstRun) {
             toMainFragment();
         } else {
@@ -146,13 +206,13 @@ public class MainActivity extends AppCompatActivity implements Message{
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (listFragment.isVisible()){
+        if (listFragment.isVisible()) {
             menu.setGroupVisible(R.id.search_group, true);
         }
-        if (createMindFragment.isVisible()){
+        if (createMindFragment.isVisible()) {
             menu.setGroupVisible(R.id.ok_group, true);
         }
-        if (viewMindFragment.isVisible()){
+        if (viewMindFragment.isVisible()) {
             menu.setGroupVisible(R.id.delete_group, true);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -178,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements Message{
 
     @Override
     public void onBackPressed() {
-        if (viewMindFragment.isVisible() || drawerLayout.isShown()){
+        if (viewMindFragment.isVisible() || drawerLayout.isShown()) {
             manager.popBackStack();
             drawerLayout.closeDrawers();
         } else {
@@ -203,5 +263,13 @@ public class MainActivity extends AppCompatActivity implements Message{
         transaction.replace(R.id.container, viewMindFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+    public boolean isConnected() {
+        ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity.getActiveNetworkInfo() != null) {
+            if (connectivity.getActiveNetworkInfo().isConnected())
+                return true;
+        }
+        return false;
     }
 }
