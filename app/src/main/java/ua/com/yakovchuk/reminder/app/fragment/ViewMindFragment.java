@@ -1,11 +1,22 @@
 package ua.com.yakovchuk.reminder.app.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import ua.com.yakovchuk.reminder.R;
 
@@ -27,7 +38,6 @@ public class ViewMindFragment extends Fragment {
         //toolbar = (Toolbar) getActivity().findViewById(R.id.collapse_toolbar);
         return inflater.inflate(R.layout.view_mind_fragment, null);
     }
-
 
     @Override
     public void onStart() {

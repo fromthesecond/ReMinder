@@ -17,6 +17,9 @@
     <string name="note_message">Medium Text</string>
     <string name="opened">Navigation drawer opened</string>
     <string name="closed">Navigation drawer closed</string>
-
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="location">Location</string>
+    <string name="tags_str">Tags</string>
 
 </resources>
