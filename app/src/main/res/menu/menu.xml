@@ -26,17 +26,17 @@
             android:visible="false"/>
     </group>
     <group android:id="@+id/ok_group">
-        <item android:id="@+id/okay_button"
-            android:title="Okay"
-            android:orderInCategory="2"
-            app:showAsAction="always"
-            android:visible="false"
-            android:icon="@drawable/ic_check_white_24dp"/>
         <item android:id="@+id/delete_button_create_view"
             android:title="delete"
             android:orderInCategory="2"
             android:icon="@drawable/ic_delete_white_24dp"
             app:showAsAction="always"
             android:visible="false"/>
+        <item android:id="@+id/okay_button"
+            android:title="Okay"
+            android:orderInCategory="2"
+            app:showAsAction="always"
+            android:visible="false"
+            android:icon="@drawable/ic_check_white_24dp"/>
     </group>
 </menu>

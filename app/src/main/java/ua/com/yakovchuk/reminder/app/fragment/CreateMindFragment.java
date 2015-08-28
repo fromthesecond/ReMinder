@@ -42,8 +42,16 @@ public class CreateMindFragment extends Fragment implements LocationListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.getProvider(LocationManager.GPS_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm :aaa");
+        SimpleDateFormat time = new SimpleDateFormat("HH:mm aaa");
         SimpleDateFormat date = new SimpleDateFormat("MM dd yyyy");
         dateText = (TextView) getActivity().findViewById(R.id.date_text_view);
         timeText = (TextView) getActivity().findViewById(R.id.time_text_view);
@@ -99,5 +107,11 @@ public class CreateMindFragment extends Fragment implements LocationListener {
     public void onProviderDisabled(String s) {
         TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
         textView.setText("GPS is disabled");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(this); // close connection
     }
 }
