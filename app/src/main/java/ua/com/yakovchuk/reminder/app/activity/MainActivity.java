@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements Message {
     private FragmentTransaction transaction;
     private CreateMindFragment createMindFragment;
     private boolean exit;
-    private boolean isFirstRun;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private android.support.v7.app.ActionBar actionBar;
@@ -77,13 +76,6 @@ public class MainActivity extends AppCompatActivity implements Message {
         );
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isfirstrun", true);
-        if (isFirstRun) {
-            toMainFragment();
-        } else {
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).
-                    edit().putBoolean("isfirstrun", false).commit();
-        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {

@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.internal.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -57,14 +58,6 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         locationManager.getProvider(LocationManager.GPS_PROVIDER);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         return inflater.inflate(R.layout.create_mind_fragment, null);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.getProvider(LocationManager.GPS_PROVIDER);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
     }
 
     @Override
@@ -194,11 +187,13 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     }
 
     public void saveMind() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy dd MMMM HH:mm");
         if (remindDate != null) {
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getActivity(), AlarmTime.class); // AlarmTime.class required for receiver
-            intent.putExtra("title", "My title from fragment");
-            intent.putExtra("body", "Some My body text from fragment.!");
+            intent.putExtra("title", "Notification title");
+            intent.putExtra("body", "Created at ");
+            intent.putExtra("created_time", simpleDateFormat.format(new Date()));
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0,
                     intent, PendingIntent.FLAG_ONE_SHOT);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, remindDate.getTime(), pendingIntent);

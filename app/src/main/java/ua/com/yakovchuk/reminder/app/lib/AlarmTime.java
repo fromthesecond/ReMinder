@@ -14,6 +14,7 @@ import ua.com.yakovchuk.reminder.app.activity.MainActivity;
 public class AlarmTime extends BroadcastReceiver {
     private String intentTitle;
     private String intentBody;
+    private String createdTime;
     @Override
     public void onReceive(Context context, Intent intent) {
         Notification.Builder builder = new Notification.Builder(context);
@@ -24,11 +25,12 @@ public class AlarmTime extends BroadcastReceiver {
         if (intent!=null) {
             intentTitle = intent.getStringExtra("title");
             intentBody = intent.getStringExtra("body");
+            createdTime = intent.getStringExtra("created_time");
         }
         builder //small icon, title, content text are required!
                 .setSmallIcon(R.drawable.header)
                 .setContentTitle(intentTitle)
-                .setContentText(intentBody)
+                .setContentText(intentBody+createdTime)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_SOUND).setAutoCancel(true);

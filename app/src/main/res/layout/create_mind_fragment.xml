@@ -10,19 +10,18 @@
         android:background="@color/MaterialIndigo500">
 
         <LinearLayout
-            style="@style/EditText"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 style="@style/TextInputLayoutStyle"
+                android:id="@+id/firstInputTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:measureWithLargestChild="false">
 
-                <EditText
-                    style="@style/EditText"
+                <android.support.v7.widget.AppCompatEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/header"
@@ -37,8 +36,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    style="@style/EditText"
+                <android.support.v7.widget.AppCompatEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/note"

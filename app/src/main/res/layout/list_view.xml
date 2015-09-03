@@ -20,7 +20,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/HeaderTextListView"
         android:text="Scott Masterson"
         android:layout_weight="0.2"
         xmlns:android="http://schemas.android.com/apk/res/android"
