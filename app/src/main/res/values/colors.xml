@@ -8,4 +8,6 @@
     <color name="MaterialBlueGrey">#b0bec5</color>
     <color name="MaterialGrey100">#f5f5f5</color>
     <color name="MaterialOrange500">#ff9800</color>
+    <color name="mdtp_accent_color">#3f51b5</color>
+    <color name="mdtp_accent_color_dark">#3f51b5</color>
 </resources>

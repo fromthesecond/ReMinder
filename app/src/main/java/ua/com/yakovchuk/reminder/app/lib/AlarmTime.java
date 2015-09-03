@@ -12,6 +12,8 @@ import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.activity.MainActivity;
 
 public class AlarmTime extends BroadcastReceiver {
+    private String intentTitle;
+    private String intentBody;
     @Override
     public void onReceive(Context context, Intent intent) {
         Notification.Builder builder = new Notification.Builder(context);
@@ -19,11 +21,14 @@ public class AlarmTime extends BroadcastReceiver {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mainIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-
+        if (intent!=null) {
+            intentTitle = intent.getStringExtra("title");
+            intentBody = intent.getStringExtra("body");
+        }
         builder //small icon, title, content text are required!
                 .setSmallIcon(R.drawable.header)
-                .setContentTitle("Title of notififcation")
-                .setContentText("Text of this notification")
+                .setContentTitle(intentTitle)
+                .setContentText(intentBody)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_SOUND).setAutoCancel(true);
@@ -34,6 +39,6 @@ public class AlarmTime extends BroadcastReceiver {
         notificationManager.notify(1, notification);
 
         //starting activity when onReceive was called
-        context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        //context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

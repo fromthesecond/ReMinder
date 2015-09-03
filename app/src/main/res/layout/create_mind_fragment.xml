@@ -10,108 +10,142 @@
         android:background="@color/MaterialIndigo500">
 
         <LinearLayout
+            style="@style/EditText"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            style="@style/EditText"
             android:orientation="vertical">
+
             <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextInputLayoutStyle"
                 android:measureWithLargestChild="false">
+
                 <EditText
+                    style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/EditText"
-                    android:singleLine="true"
-                    android:textSize="36sp"
                     android:hint="@string/header"
-                    android:minWidth="500dp" />
+                    android:minWidth="500dp"
+                    android:singleLine="true"
+                    android:textSize="36sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextInputLayoutStyle"
                 android:orientation="horizontal">
+
                 <EditText
+                    style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/EditText"
                     android:hint="@string/note"
+                    android:inputType="textMultiLine"
                     android:textSize="18sp"
-                    app:met_minCharacters="5"
                     app:met_maxCharacters="144"
-                    android:inputType="textMultiLine" />
+                    app:met_minCharacters="5" />
             </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical|top"
-    android:orientation="vertical"
-    android:padding="25dp">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/time"
-        android:id="@+id/textView5"
-        android:textStyle="bold"
-        android:singleLine="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/time_text_view" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|top"
+        android:orientation="vertical"
+        android:padding="25dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/date"
-        android:id="@+id/textView7"
-        android:textStyle="bold"
-        android:paddingTop="15dp" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:text="@string/time"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/date_text_view" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/location"
-        android:id="@+id/textView9"
-        android:textStyle="bold"
-        android:paddingTop="15dp" />
+        <TextView
+            android:id="@+id/time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/location_text" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="@string/date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/tags_str"
-        android:id="@+id/textView11"
-        android:textStyle="bold"
-        android:paddingTop="15dp" />
+        <TextView
+            android:id="@+id/date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/tags_text"
-        android:text="None" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="@string/location"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="@string/tags_str"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tags_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="None"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right">
+
+            <Button
+                android:id="@+id/remind"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@color/MaterialWhite"
+                android:text="REMIND?"
+                android:textColor="@color/MaterialIndigo500" />
+
+            <Button
+                android:id="@+id/setTest"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SETUP"
+                android:background="@color/MaterialWhite"
+                android:textColor="@color/MaterialIndigo500" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 
