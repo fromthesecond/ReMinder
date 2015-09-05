@@ -97,10 +97,19 @@
 
         <TextView
             android:id="@+id/location_text"
+            android:text="Location not found"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:id="@+id/openInMaps"
+            android:text="OPEN ON MAP"
+            android:background="@color/MaterialWhite"
+            android:textSize="12sp"
+            android:textColor="@color/MaterialIndigo500"
+            android:layout_gravity="right" />
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
