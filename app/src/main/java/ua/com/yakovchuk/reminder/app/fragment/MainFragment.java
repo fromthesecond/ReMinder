@@ -16,10 +16,7 @@ import android.widget.Button;
 import java.util.GregorianCalendar;
 
 import ua.com.yakovchuk.reminder.R;
-import ua.com.yakovchuk.reminder.app.activity.MainActivity;
 import ua.com.yakovchuk.reminder.app.lib.AlarmTime;
-
-import static android.content.Context.ALARM_SERVICE;
 
 public class MainFragment extends Fragment {
 

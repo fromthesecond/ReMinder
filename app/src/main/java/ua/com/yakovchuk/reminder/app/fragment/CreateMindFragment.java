@@ -11,9 +11,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.internal.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,11 +40,12 @@ import ua.com.yakovchuk.reminder.app.lib.AlarmTime;
 public class CreateMindFragment extends Fragment implements LocationListener, View.OnClickListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, MenuItemImpl.OnMenuItemClickListener {
     protected LocationManager locationManager;
-    private double latitude;
-    private double longitude;
+    private double latitude = 0;
+    private double longitude = 0;
     private TextView dateText;
     private TextView timeText;
     private Button remindBtn;
+    private Button openMaps;
     private Button setup;
     private Calendar calendar;
     private Date remindDate = null;
@@ -54,10 +55,14 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.getProvider(LocationManager.GPS_PROVIDER);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        setupLocation();
         return inflater.inflate(R.layout.create_mind_fragment, null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupLocation();
     }
 
     @Override
@@ -69,11 +74,31 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         timeText = (TextView) getActivity().findViewById(R.id.time_text_view);
         remindBtn = (Button) getActivity().findViewById(R.id.remind);
         setup = (Button) getActivity().findViewById(R.id.setTest);
+        openMaps = (Button) getActivity().findViewById(R.id.openInMaps);
         remindBtn.setOnClickListener(this); // setup listener from interface
         setup.setOnClickListener(this); // setup listener from interface
         dateText.setText(date.format(new Date()));
         timeText.setText(time.format(new Date()));
         getActivity().invalidateOptionsMenu();
+
+        openMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (longitude != 0 && latitude != 0) {
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    getActivity().startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "Can`t open maps. Location is unavailable ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void setupLocation() {
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.getProvider(LocationManager.GPS_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
     }
 
     public boolean isConnected() {
@@ -103,7 +128,7 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
             }
         } else {
             TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
-            textView.setText("You`re offline!");
+            textView.setText("Internet connection is not available");
         }
     }
 
@@ -144,6 +169,10 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         }
     }
 
+    private void openViaMaps(View view) {
+
+    }
+
     public void createDateDialog() {
         Calendar now = Calendar.getInstance();
         TimePickerDialog tpd = TimePickerDialog.newInstance(
@@ -152,6 +181,8 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 now.get(Calendar.MINUTE),
                 true
         );
+        tpd.setStartTime(now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE));
         tpd.show(getFragmentManager(), "TimePicker Dialog");
     }
 
@@ -163,6 +194,7 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        dpd.setMinDate(now);
         dpd.vibrate(true);
         dpd.show(getFragmentManager(), "Datepicker Dialog");
     }

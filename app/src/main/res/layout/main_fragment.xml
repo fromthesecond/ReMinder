@@ -26,6 +26,7 @@
         android:text="Check it!"
         android:id="@+id/checit"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
 
 </LinearLayout>
