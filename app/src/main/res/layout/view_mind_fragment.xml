@@ -11,25 +11,25 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.10"
         android:background="@color/MaterialIndigo500"
         android:orientation="vertical"
         android:padding="10dp"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_weight="0.10">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="164dp"
-                android:layout_height="164dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/circle" />
 
             <TextView
                 android:id="@+id/text_view_mind"
-                android:layout_width="fill_parent"
-                android:layout_height="62dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_horizontal"
                 android:text="Title"
@@ -40,10 +40,8 @@
 
         <TextView
             android:id="@+id/tagsView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.25"
             android:text="@string/tags"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/MaterialWhite" />

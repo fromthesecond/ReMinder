@@ -4,13 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.Typeface;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,14 +16,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
@@ -50,18 +40,21 @@ public class MainActivity extends AppCompatActivity implements Message {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private android.support.v7.app.ActionBar actionBar;
-
+    private SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActiveAndroid.initialize(this);
         setContentView(R.layout.activity_main);
         setSystemBarColor(this);
+        prefs = getSharedPreferences("com.ua.com.yakovchuk.reminder", Context.MODE_PRIVATE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         listFragment = new ListFragment();
+        toListViewFragment();
         viewMindFragment = new ViewMindFragment();
         createMindFragment = new CreateMindFragment();
         mainFragment = new MainFragment();
@@ -93,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements Message {
                 return true;
             }
         });
+
     }
 
     public void toMainFragment() {
@@ -150,38 +144,6 @@ public class MainActivity extends AppCompatActivity implements Message {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (listFragment.isVisible()) {
-            menu.setGroupVisible(R.id.search_group, true);
-        }
-        if (createMindFragment.isVisible()) {
-            menu.setGroupVisible(R.id.ok_group, true);
-        }
-        if (viewMindFragment.isVisible()) {
-            menu.setGroupVisible(R.id.delete_group, true);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    public Typeface getFont(String arg) {
-        String string = null;
-        switch (arg) {
-            case "regular":
-                string = getString(R.string.font_roboto_regular);
-                break;
-            case "bold":
-                string = getString(R.string.font_roboto_bold);
-                break;
-            case "medium":
-                string = getString(R.string.font_roboto_medium);
-                break;
-        }
-        Typeface face = Typeface.createFromAsset(getAssets(),
-                string);
-        return face;
-    }
-
-    @Override
     public void onBackPressed() {
         if (viewMindFragment.isVisible() || drawerLayout.isShown()) {
             manager.popBackStack();
@@ -209,4 +171,10 @@ public class MainActivity extends AppCompatActivity implements Message {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }

@@ -12,24 +12,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.GregorianCalendar;
 
 import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.lib.AlarmTime;
+import ua.com.yakovchuk.reminder.app.lib.LocationGPS;
 
 public class MainFragment extends Fragment {
 
     public final static String TAG = "MainFragment";
     private Button go;
+    private LocationGPS gps;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().startService(new Intent(getActivity(), LocationGPS.class));
         return inflater.inflate(R.layout.main_fragment, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        gps = new LocationGPS(getActivity().getApplicationContext());
+        TextView textView = (TextView) getActivity().findViewById(R.id.textView4);
+        if (gps.canGetLocation()) {
+            textView.setText(gps.getLocationName());
+        } else {
+            textView.setText("Cannot get location");
+        }
         go = (Button) getActivity().findViewById(R.id.checit);
         go.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,4 +59,17 @@ public class MainFragment extends Fragment {
         });
         getActivity().invalidateOptionsMenu();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        gps.stopUsingGPS();
+        getActivity().stopService(new Intent(getActivity(), LocationGPS.class));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 }

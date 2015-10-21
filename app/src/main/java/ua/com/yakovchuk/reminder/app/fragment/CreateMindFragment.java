@@ -2,6 +2,7 @@ package ua.com.yakovchuk.reminder.app.fragment;
 
 import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +15,20 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.internal.view.menu.MenuItemImpl;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -35,20 +41,25 @@ import java.util.List;
 import java.util.Locale;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.entity.Mind;
 import ua.com.yakovchuk.reminder.app.lib.AlarmTime;
 
 public class CreateMindFragment extends Fragment implements LocationListener, View.OnClickListener,
-        TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, MenuItemImpl.OnMenuItemClickListener {
+        TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     protected LocationManager locationManager;
     private double latitude = 0;
     private double longitude = 0;
     private TextView dateText;
     private TextView timeText;
+    private EditText title;
+    private EditText body;
     private Button remindBtn;
     private Button openMaps;
     private Button setup;
     private Calendar calendar;
     private Date remindDate = null;
+    private ProgressBar progressBar;
+    private Location currentLocation;
 
     public final static String TAG = "CreateMindFragment";
 
@@ -56,13 +67,8 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setupLocation();
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.create_mind_fragment, null);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupLocation();
     }
 
     @Override
@@ -70,15 +76,20 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
         SimpleDateFormat date = new SimpleDateFormat("yyyy, dd MMMM");
         calendar = Calendar.getInstance();
+        title = (EditText) getActivity().findViewById(R.id.title_edit_text);
+        body = (EditText) getActivity().findViewById(R.id.body_edit_text);
         dateText = (TextView) getActivity().findViewById(R.id.date_text_view);
         timeText = (TextView) getActivity().findViewById(R.id.time_text_view);
         remindBtn = (Button) getActivity().findViewById(R.id.remind);
         setup = (Button) getActivity().findViewById(R.id.setTest);
         openMaps = (Button) getActivity().findViewById(R.id.openInMaps);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
         remindBtn.setOnClickListener(this); // setup listener from interface
         setup.setOnClickListener(this); // setup listener from interface
         dateText.setText(date.format(new Date()));
         timeText.setText(time.format(new Date()));
+
+        progressBar.setVisibility(View.GONE);
         getActivity().invalidateOptionsMenu();
 
         openMaps.setOnClickListener(new View.OnClickListener() {
@@ -112,41 +123,59 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
 
     @Override
     public void onLocationChanged(Location location) {
+        currentLocation = location;
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
+        progressBar.setVisibility(View.VISIBLE);
+        List<Address> addresses = null;
         if (isConnected()) {
             try {
-                TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
                 Geocoder geocoder = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
-                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                textView.setText(addresses.get(0).getCountryName() +
-                        ", " + addresses.get(0).getLocality() +
-                        ", " + addresses.get(0).getAdminArea() +
-                        ", " + addresses.get(0).getAddressLine(0));
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
             } catch (IOException e) {
+                textView.setText(e.toString());
                 e.printStackTrace();
             }
+            if (addresses == null || addresses.size() == 0) {
+                textView.setText("Addresses are null");
+            } else {
+                Address address = addresses.get(0);
+                progressBar.setVisibility(View.GONE);
+                StringBuilder stringBuffer = new StringBuilder();
+                stringBuffer.append(address.getLocality() + " ");
+                stringBuffer.append(address.getAdminArea() + " ");
+                stringBuffer.append(address.getAddressLine(0) + " ");
+                stringBuffer.append(address.getPremises() + " ");
+                stringBuffer.append(address.getSubLocality() + " ");
+                stringBuffer.append(address.getFeatureName() + " ");
+
+                textView.setText(stringBuffer.toString().replace("null", ""));
+            }
         } else {
-            TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
-            textView.setText("Internet connection is not available");
+            progressBar.setVisibility(View.GONE);
+            textView.setText("Connection is not available");
         }
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
         TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
+        progressBar.setVisibility(View.VISIBLE);
         textView.setText("Location temporarily unavailable");
     }
 
     @Override
     public void onProviderEnabled(String s) {
         TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
+        progressBar.setVisibility(View.VISIBLE);
         textView.setText("Searching for location...");
     }
 
     @Override
     public void onProviderDisabled(String s) {
         TextView textView = (TextView) getActivity().findViewById(R.id.location_text);
+        progressBar.setVisibility(View.GONE);
         textView.setText("GPS is disabled");
     }
 
@@ -167,10 +196,6 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 saveMind();
                 break;
         }
-    }
-
-    private void openViaMaps(View view) {
-
     }
 
     public void createDateDialog() {
@@ -236,11 +261,41 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.create_mind_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.okay_button:
-                Toast.makeText(getActivity(), "Menu Item OK Button", Toast.LENGTH_SHORT).show();
+                onSaveMind();
+                break;
+            case R.id.delete_button_create_view:
+                onDeleteMind();
+                break;
         }
         return false;
+    }
+
+    public void onSaveMind() {
+        if (title.getText().length() < 1 || body.getText().length() < 1) {
+            Toast.makeText(getActivity(), "The contents of fields required!", Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                Mind mind = new Mind(title.getText().toString(), body.getText().toString());
+                mind.save();
+                getActivity().getFragmentManager().popBackStack();
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.container, new ListFragment()).commit();
+                //getActivity().finish();
+            } catch (Exception c) {
+                Log.e("DB", c.toString());
+            }
+        }
+    }
+    public void onDeleteMind(){
+        // TODO Delete mind
     }
 }

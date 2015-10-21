@@ -10,6 +10,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class ViewMindFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //toolbar = (Toolbar) getActivity().findViewById(R.id.collapse_toolbar);
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.view_mind_fragment, null);
     }
 
@@ -49,6 +52,12 @@ public class ViewMindFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().invalidateOptionsMenu();
-        //((MainActivity)getActivity()).setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.view_mind_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
