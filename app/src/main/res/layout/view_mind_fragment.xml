@@ -57,7 +57,7 @@
             android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/createdDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -67,12 +67,15 @@
             android:textSize="11sp" />
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.9"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/note_message"
             android:layout_width="match_parent"
@@ -84,12 +87,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/last_modifed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/last_modifed"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/last_modifed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/last_modifed"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 </LinearLayout>

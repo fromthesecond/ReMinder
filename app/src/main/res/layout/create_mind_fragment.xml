@@ -157,16 +157,6 @@
                     android:textSize="12sp"
                     android:textColor="@color/MaterialIndigo500"
                     android:text="REMIND?" />
-
-                <Button
-                    android:id="@+id/setTest"
-                    style="Widget.Material.Button"
-                    android:background="@color/MaterialPink500"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/MaterialWhite"
-                    android:text="OK"
-                    android:singleLine="false" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

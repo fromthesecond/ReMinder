@@ -22,13 +22,15 @@ import com.activeandroid.ActiveAndroid;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.entity.Mind;
 import ua.com.yakovchuk.reminder.app.fragment.CreateMindFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ListFragment;
 import ua.com.yakovchuk.reminder.app.fragment.MainFragment;
 import ua.com.yakovchuk.reminder.app.fragment.ViewMindFragment;
 import ua.com.yakovchuk.reminder.app.interfaces.Message;
+import ua.com.yakovchuk.reminder.app.interfaces.MindMessage;
 
-public class MainActivity extends AppCompatActivity implements Message {
+public class MainActivity extends AppCompatActivity implements Message, MindMessage {
 
     private ListFragment listFragment;
     private ViewMindFragment viewMindFragment;
@@ -177,4 +179,15 @@ public class MainActivity extends AppCompatActivity implements Message {
         super.onResume();
     }
 
+    @Override
+    public void respondMind(Mind mind) {
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+        viewMindFragment.setRespondMind(mind);
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right,
+                R.anim.slide_in_left, R.anim.slide_in_right); // more animation for popBackStack()
+        transaction.replace(R.id.container, viewMindFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

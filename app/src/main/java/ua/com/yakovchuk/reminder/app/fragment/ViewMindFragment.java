@@ -17,15 +17,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 import ua.com.yakovchuk.reminder.R;
+import ua.com.yakovchuk.reminder.app.entity.Mind;
 
 public class ViewMindFragment extends Fragment {
     public final static String TAG = "ViewMindFragment";
-    private TextView textView;
+    private TextView title;
+    private TextView location;
+    private TextView body;
+    private TextView createdDate;
+    private TextView lastModifedDate;
     public String respondMessage;
+    public Mind respondMind;
+
+    public Mind getRespondMind() {
+        return respondMind;
+    }
+
+    public void setRespondMind(Mind respondMind) {
+        this.respondMind = respondMind;
+    }
 
     public String getRespondMessage() {
         return respondMessage;
@@ -45,8 +60,18 @@ public class ViewMindFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        textView = (TextView) getActivity().findViewById(R.id.text_view_mind);
-        textView.setText(getRespondMessage());
+        SimpleDateFormat date = new SimpleDateFormat("yyyy, dd MMMM HH:mm");
+        title = (TextView) getActivity().findViewById(R.id.text_view_mind);
+        location = (TextView) getActivity().findViewById(R.id.position);
+        body = (TextView) getActivity().findViewById(R.id.note_message);
+        createdDate = (TextView) getActivity().findViewById(R.id.createdDate);
+        lastModifedDate = (TextView) getActivity().findViewById(R.id.last_modifed);
+
+        title.setText(getRespondMind().getTitle());
+        location.setText(getRespondMind().getLocationName());
+        body.setText(getRespondMind().getBody());
+        createdDate.setText(date.format(getRespondMind().getCreatedDate()));
+        lastModifedDate.setText(date.format(getRespondMind().getLastModifedTime()));
     }
 
     @Override

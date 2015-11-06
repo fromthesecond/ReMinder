@@ -49,13 +49,13 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     protected LocationManager locationManager;
     private double latitude = 0;
     private double longitude = 0;
+    private String locationName;
     private TextView dateText;
     private TextView timeText;
     private EditText title;
     private EditText body;
     private Button remindBtn;
     private Button openMaps;
-    private Button setup;
     private Calendar calendar;
     private Date remindDate = null;
     private ProgressBar progressBar;
@@ -81,11 +81,9 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         dateText = (TextView) getActivity().findViewById(R.id.date_text_view);
         timeText = (TextView) getActivity().findViewById(R.id.time_text_view);
         remindBtn = (Button) getActivity().findViewById(R.id.remind);
-        setup = (Button) getActivity().findViewById(R.id.setTest);
         openMaps = (Button) getActivity().findViewById(R.id.openInMaps);
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
         remindBtn.setOnClickListener(this); // setup listener from interface
-        setup.setOnClickListener(this); // setup listener from interface
         dateText.setText(date.format(new Date()));
         timeText.setText(time.format(new Date()));
 
@@ -149,7 +147,7 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 stringBuffer.append(address.getPremises() + " ");
                 stringBuffer.append(address.getSubLocality() + " ");
                 stringBuffer.append(address.getFeatureName() + " ");
-
+                locationName = stringBuffer.toString();
                 textView.setText(stringBuffer.toString().replace("null", ""));
             }
         } else {
@@ -191,9 +189,6 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
             case R.id.remind:
                 createDateDialog();
                 createTimeDialog();
-                break;
-            case R.id.setTest:
-                saveMind();
                 break;
         }
     }
@@ -243,23 +238,6 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         calendar.set(Calendar.DAY_OF_MONTH, i2);
     }
 
-    public void saveMind() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy dd MMMM HH:mm");
-        if (remindDate != null) {
-            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getActivity(), AlarmTime.class); // AlarmTime.class required for receiver
-            intent.putExtra("title", "Notification title");
-            intent.putExtra("body", "Created at ");
-            intent.putExtra("created_time", simpleDateFormat.format(new Date()));
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0,
-                    intent, PendingIntent.FLAG_ONE_SHOT);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, remindDate.getTime(), pendingIntent);
-            Toast.makeText(getActivity(), "Created!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), "NOT Created! Because date is false", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -286,7 +264,18 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         } else {
             try {
                 Mind mind = new Mind(title.getText().toString(), body.getText().toString());
+                mind.setCreatedDate(new Date());
+                if (latitude != 0) {
+                    mind.setLatitude(this.latitude);
+                    mind.setLongtitude(this.longitude);
+                    mind.setLocationName(locationName);
+                }
+                mind.setLastModifedTime(new Date());
+                if (remindDate != null) {
+                    remindForMind(mind);
+                }
                 mind.save();
+                Toast.makeText(getActivity(), " " + latitude + longitude + locationName, Toast.LENGTH_SHORT).show();
                 getActivity().getFragmentManager().popBackStack();
                 getActivity().getFragmentManager().beginTransaction().replace(R.id.container, new ListFragment()).commit();
                 //getActivity().finish();
@@ -294,6 +283,18 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 Log.e("DB", c.toString());
             }
         }
+    }
+
+    public void remindForMind (Mind mind) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy dd MMMM HH:mm");
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getActivity(), AlarmTime.class); // AlarmTime.class required for receiver
+        intent.putExtra("title", mind.getTitle());
+        intent.putExtra("body", mind.getBody());
+        intent.putExtra("created_time", mind.getCreatedDate().getTime());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0,
+                intent, PendingIntent.FLAG_ONE_SHOT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, remindDate.getTime(), pendingIntent);
     }
     public void onDeleteMind(){
         // TODO Delete mind

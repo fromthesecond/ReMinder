@@ -19,12 +19,15 @@ import android.widget.ListView;
 
 import com.activeandroid.query.Select;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.com.yakovchuk.reminder.R;
 import ua.com.yakovchuk.reminder.app.entity.Mind;
 import ua.com.yakovchuk.reminder.app.interfaces.Message;
+import ua.com.yakovchuk.reminder.app.interfaces.MindMessage;
 import ua.com.yakovchuk.reminder.app.lib.CustomAdapter;
 
 public class ListFragment extends Fragment {
@@ -36,6 +39,7 @@ public class ListFragment extends Fragment {
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private Message message;
+    private MindMessage mindMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,16 +52,11 @@ public class ListFragment extends Fragment {
         getActivity().invalidateOptionsMenu();
         setupListView();
         ListView listView = (ListView) getActivity().findViewById(R.id.listView_container);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                message.respond(String.valueOf("Message #") + i);
-            }
-        });
     }
 
     public void setupListView() {
         List<Mind> minds = new Select().from(Mind.class).execute();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy, dd MMMM");
         names = new ArrayList<String>();
         description = new ArrayList<String>();
         for (Mind m: minds) {
@@ -81,12 +80,23 @@ public class ListFragment extends Fragment {
         ListAdapter adapter = new CustomAdapter(getActivity().getApplicationContext(), names, description);
         listView = (ListView) getView().findViewById(R.id.listView_container);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                List<Mind> minds = new Select().from(Mind.class).execute();
+                //message.respondObj(minds.get(i));
+                mindMessage.respondMind(minds.get(i));
+                message.respond(String.valueOf("Message #") + minds.get(i).getTitle() );
+            }
+        });
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         message = (Message) activity;
+        mindMessage = (MindMessage) activity;
     }
 
     @Override
