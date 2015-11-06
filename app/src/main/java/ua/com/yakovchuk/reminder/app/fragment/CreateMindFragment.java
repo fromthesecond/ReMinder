@@ -141,14 +141,12 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 Address address = addresses.get(0);
                 progressBar.setVisibility(View.GONE);
                 StringBuilder stringBuffer = new StringBuilder();
-                stringBuffer.append(address.getLocality() + " ");
-                stringBuffer.append(address.getAdminArea() + " ");
-                stringBuffer.append(address.getAddressLine(0) + " ");
-                stringBuffer.append(address.getPremises() + " ");
-                stringBuffer.append(address.getSubLocality() + " ");
-                stringBuffer.append(address.getFeatureName() + " ");
-                locationName = stringBuffer.toString();
+                stringBuffer.append(address.getCountryCode() + ", ");
+                stringBuffer.append(address.getCountryName() + ", ");
+                stringBuffer.append(address.getAdminArea() + ", ");
+                stringBuffer.append(address.getAddressLine(0) + ", ");
                 textView.setText(stringBuffer.toString().replace("null", ""));
+                locationName = stringBuffer.toString();
             }
         } else {
             progressBar.setVisibility(View.GONE);
@@ -275,10 +273,8 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                     remindForMind(mind);
                 }
                 mind.save();
-                Toast.makeText(getActivity(), " " + latitude + longitude + locationName, Toast.LENGTH_SHORT).show();
                 getActivity().getFragmentManager().popBackStack();
                 getActivity().getFragmentManager().beginTransaction().replace(R.id.container, new ListFragment()).commit();
-                //getActivity().finish();
             } catch (Exception c) {
                 Log.e("DB", c.toString());
             }

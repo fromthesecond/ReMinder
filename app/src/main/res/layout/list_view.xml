@@ -1,5 +1,5 @@
 <LinearLayout
-    android:layout_height="65dp"
+    android:layout_height="67dp"
     android:layout_width="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scott Masterson"
+        android:text="Пробую локацию"
         android:layout_weight="0.2"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/header"
@@ -29,8 +29,8 @@
         android:textColor="@color/MaterialBlack"
         android:layout_alignWithParentIfMissing="false"
         android:layout_toEndOf="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/textView3" />
+        android:layout_above="@+id/textView3"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,9 +40,9 @@
         android:id="@+id/description"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignStart="@+id/header"
-        android:layout_below="@+id/header"
         android:layout_toStartOf="@+id/textView3"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/header" />
 
     <TextView
         android:layout_width="wrap_content"

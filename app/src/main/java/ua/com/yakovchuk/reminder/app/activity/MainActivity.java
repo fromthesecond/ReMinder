@@ -147,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements Message, MindMess
 
     @Override
     public void onBackPressed() {
-        if (viewMindFragment.isVisible() || drawerLayout.isShown()) {
-            manager.popBackStack();
+        manager.popBackStackImmediate();
+        /*if (viewMindFragment.isVisible() || drawerLayout.isShown()) {
             drawerLayout.closeDrawers();
         } else {
             if (exit) {
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements Message, MindMess
                 Toast.makeText(this, "Press Back Again to Exit", Toast.LENGTH_LONG).show();
                 exit = true;
             }
-        }
+        }*/
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 
@@ -40,6 +42,7 @@ public class ListFragment extends Fragment {
     private FragmentTransaction transaction;
     private Message message;
     private MindMessage mindMessage;
+    public  Mind deletedMind;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,11 +54,10 @@ public class ListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().invalidateOptionsMenu();
         setupListView();
-        ListView listView = (ListView) getActivity().findViewById(R.id.listView_container);
     }
 
     public void setupListView() {
-        List<Mind> minds = new Select().from(Mind.class).execute();
+        final List<Mind> minds = new Select().from(Mind.class).execute();
         SimpleDateFormat date = new SimpleDateFormat("yyyy, dd MMMM");
         names = new ArrayList<String>();
         description = new ArrayList<String>();
@@ -63,23 +65,36 @@ public class ListFragment extends Fragment {
             names.add(m.getTitle());
             description.add(m.getBody());
         }
-        /*
-        names.add("Adam Sendler");
-        description.add("He says");
-        names.add("Mario Gomez");
-        description.add("Scored a few goals");
-        names.add("Monica Beluchi");
-        description.add("Had sex a few days ago");
 
-        names.add(minds.get(0).getTitle());
-        description.add(minds.get(0).getBody());
-        names.add(minds.get(1).getTitle());
-        description.add(minds.get(1).getBody());*/
-        /*names.add(mind.getTitle());
-        description.add(mind.getBody());*/
         ListAdapter adapter = new CustomAdapter(getActivity().getApplicationContext(), names, description);
         listView = (ListView) getView().findViewById(R.id.listView_container);
         listView.setAdapter(adapter);
+        listView.setLongClickable(true);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final Mind mind = Mind.load(Mind.class, minds.get(i).getId());
+                deletedMind = mind;
+                mind.delete();
+                Snackbar.make(getView(), "Mind " + minds.get(i).getTitle() + " has been deleted!", Snackbar.LENGTH_LONG)
+                        .setAction("Cancel", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Mind mind1 = new Mind(deletedMind.getTitle(), deletedMind.getBody());
+                                mind1.setLastModifedTime(deletedMind.getLastModifedTime());
+                                mind1.setLocationName(deletedMind.getLocationName());
+                                mind1.setLongtitude(deletedMind.getLongtitude());
+                                mind1.setLatitude(deletedMind.getLatitude());
+                                mind1.setCreatedDate(deletedMind.getCreatedDate());
+                                mind1.save();
+                                setupListView();
+                            }
+                        }).show();
+                setupListView();
+                return true;
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,9 +102,10 @@ public class ListFragment extends Fragment {
                 List<Mind> minds = new Select().from(Mind.class).execute();
                 //message.respondObj(minds.get(i));
                 mindMessage.respondMind(minds.get(i));
-                message.respond(String.valueOf("Message #") + minds.get(i).getTitle() );
+                message.respond(String.valueOf("Message #") + minds.get(i).getTitle());
             }
         });
+
     }
 
     @Override
@@ -109,5 +125,11 @@ public class ListFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        setupListView();
+        super.onResume();
     }
 }
