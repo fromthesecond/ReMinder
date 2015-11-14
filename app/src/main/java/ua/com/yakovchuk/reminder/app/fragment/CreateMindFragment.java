@@ -1,11 +1,16 @@
 package ua.com.yakovchuk.reminder.app.fragment;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +19,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +42,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,11 +65,13 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     private EditText title;
     private EditText body;
     private Button remindBtn;
+    private Button takePicture;
     private Button openMaps;
     private Calendar calendar;
     private Date remindDate = null;
     private ProgressBar progressBar;
     private Location currentLocation;
+    private File imageFile;
 
     public final static String TAG = "CreateMindFragment";
 
@@ -81,9 +93,11 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
         dateText = (TextView) getActivity().findViewById(R.id.date_text_view);
         timeText = (TextView) getActivity().findViewById(R.id.time_text_view);
         remindBtn = (Button) getActivity().findViewById(R.id.remind);
+        takePicture = (Button) getActivity().findViewById(R.id.takePicture);
         openMaps = (Button) getActivity().findViewById(R.id.openInMaps);
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
         remindBtn.setOnClickListener(this); // setup listener from interface
+        takePicture.setOnClickListener(this); // setup listener from interface
         dateText.setText(date.format(new Date()));
         timeText.setText(time.format(new Date()));
 
@@ -145,8 +159,8 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
                 stringBuffer.append(address.getCountryName() + ", ");
                 stringBuffer.append(address.getAdminArea() + ", ");
                 stringBuffer.append(address.getAddressLine(0) + ", ");
-                textView.setText(stringBuffer.toString().replace("null", ""));
-                locationName = stringBuffer.toString();
+                locationName = stringBuffer.toString().replace(", null", "");
+                textView.setText(locationName);
             }
         } else {
             progressBar.setVisibility(View.GONE);
@@ -187,6 +201,9 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
             case R.id.remind:
                 createDateDialog();
                 createTimeDialog();
+                break;
+            case R.id.takePicture:
+                takePicture();
                 break;
         }
     }
@@ -294,5 +311,55 @@ public class CreateMindFragment extends Fragment implements LocationListener, Vi
     }
     public void onDeleteMind(){
         // TODO Delete mind
+    }
+
+    public void takePicture () {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyddMMMMHHmmss.SSSSSS", Locale.US);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File out = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                simpleDateFormat.format(new Date())+".jpg");
+        Uri uri = Uri.fromFile(out);
+        /*intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);*/
+        /*imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                simpleDateFormat.format(new Date())+".jpg");
+        Uri uri = Uri.fromFile(imageFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);*/
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ImageView imageView = (ImageView) getActivity().findViewById(R.id.snap);
+        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.blueLineard);
+        if (requestCode == 0) {
+            //Uri selectedImage = data.getData();
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            //MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "", "");
+            //linearLayout.setBackground(bitmap);
+            imageView.setImageBitmap(bitmap);
+        }
+        /*if (requestCode == 0) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    if (imageFile.exists()) {
+                        Toast.makeText(getActivity(), "File successfully saved", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Error during saving file "+imageFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                        *//*BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), bmOptions);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+                        imageView.setImageBitmap(bitmap);*//*
+
+                    }
+                break;
+                case Activity.RESULT_CANCELED:
+                    Toast.makeText(getActivity(), "Result Canceled", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } else {
+            Toast.makeText(getActivity(), "Result code not 0", Toast.LENGTH_LONG).show();
+        }*/
     }
 }

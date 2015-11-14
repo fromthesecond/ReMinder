@@ -19,12 +19,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/circle" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                android:id="@+id/editTitleView">
+                <EditText
+                    android:id="@+id/editTitleText"
+                    android:layout_width="wrap_content"
+                    android:singleLine="true"
+                    android:layout_weight="0.9"
+                    android:background="@null"
+                    android:textColor="@color/MaterialWhite"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/setEditedTitle"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_check_white_24dp"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/text_view_mind"
@@ -69,6 +91,14 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/MaterialWhite"
             android:textSize="11sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/saveBodyImageView"
+            android:visibility="gone"
+            android:src="@drawable/ic_save_white_24dp"
+            android:layout_gravity="right" />
     </LinearLayout>
 
     <ScrollView
@@ -90,7 +120,16 @@
             android:text="@string/note_message"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="18sp" />
-
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.45"
+            android:padding="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:id="@+id/bodyEditHidden" />
     </LinearLayout>
     </ScrollView>
 
